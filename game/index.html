@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小诗与五个男模</title>
+  <style>
+    :root {
+      --bg: #090814;
+      --bg-soft: #141326;
+      --panel: rgba(18, 18, 34, 0.72);
+      --panel-strong: rgba(14, 14, 28, 0.88);
+      --line: rgba(255,255,255,0.12);
+      --line-strong: rgba(255,255,255,0.2);
+      --text: #fff7ff;
+      --muted: #d2c5ea;
+      --muted-2: #9f93bc;
+      --accent: #ff75bb;
+      --accent-2: #9075ff;
+      --good: #89f2c2;
+      --gold: #ffd989;
+      --shadow: 0 30px 80px rgba(0,0,0,0.42);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,117,187,0.16), transparent 22%),
+        radial-gradient(circle at top right, rgba(144,117,255,0.18), transparent 26%),
+        radial-gradient(circle at bottom center, rgba(255,217,137,0.1), transparent 24%),
+        linear-gradient(180deg, #18152d 0%, #0e0c1b 45%, #07070f 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.16) 0.7px, transparent 0.8px),
+        radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1.1px);
+      background-size: 140px 140px, 220px 220px;
+      background-position: 0 0, 40px 60px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 22px 34px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color: #f8d7f1;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      letter-spacing: 0.4px;
+      margin-bottom: 12px;
+    }
+
+    .title {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.06;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      max-width: 660px;
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .chipbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      padding: 9px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      backdrop-filter: blur(10px);
+    }
+
+    .panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .scene, .side {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .scene {
+      position: relative;
+      min-height: 760px;
+      display: flex;
+      flex-direction: column;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
+        linear-gradient(180deg, rgba(255,255,255,0.02), transparent 28%),
+        var(--panel);
+    }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,0.16), transparent 18%),
+        radial-gradient(circle at 84% 14%, rgba(255,117,187,0.18), transparent 18%),
+        radial-gradient(circle at 55% 74%, rgba(144,117,255,0.22), transparent 28%),
+        linear-gradient(180deg, rgba(14,14,28,0.1), rgba(14,14,28,0.42));
+      pointer-events: none;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 22px 24px 0;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 470px;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .location {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(7,9,30,0.22);
+      color: #f2eaff;
+      padding: 9px 14px;
+      font-size: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    .scene-badge {
+      color: #f5dff1;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    .portrait-stage {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 28px 10px 0;
+    }
+
+    .glow-ring {
+      position: absolute;
+      width: min(420px, 65%);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.28) 0%, rgba(255,117,187,0.12) 30%, rgba(144,117,255,0.1) 48%, transparent 72%);
+      filter: blur(10px);
+      opacity: 0.92;
+    }
+
+    .avatar-card {
+      width: min(340px, 76%);
+      min-height: 360px;
+      border-radius: 36px 36px 18px 18px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06)),
+        linear-gradient(180deg, rgba(255,117,187,0.12), rgba(144,117,255,0.12));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.34);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.28), transparent 24%),
+        linear-gradient(180deg, transparent, rgba(9,8,20,0.18));
+      pointer-events: none;
+    }
+
+    .avatar {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(88px, 16vw, 150px);
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.22));
+    }
+
+    .nameplate {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      padding-bottom: 18px;
+    }
+
+    .speaker {
+      font-size: clamp(28px, 5vw, 38px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.5px;
+    }
+
+    .role {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.3px;
+    }
+
+    .meter {
+      min-width: 156px;
+      text-align: right;
+    }
+
+    .meter .label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .bar {
+      width: 156px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.18);
+    }
+
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #ffa5d3 45%, #fff0ac 100%);
+      width: 0;
+      transition: width .28s ease;
+      box-shadow: 0 0 14px rgba(255,117,187,0.4);
+    }
+
+    .dialogue-shell {
+      position: relative;
+      z-index: 2;
+      margin: 0 16px 16px;
+      border: 1px solid var(--line-strong);
+      background: var(--panel-strong);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.28);
+    }
+
+    .dialogue-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .dialogue-tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: #ffe2f2;
+      font-size: 12px;
+      letter-spacing: 0.35px;
+    }
+
+    .dialogue-hint {
+      color: var(--muted-2);
+      font-size: 12px;
+    }
+
+    .dialogue {
+      padding: 22px 20px 16px;
+    }
+
+    .story {
+      line-height: 1.95;
+      color: #fff7ff;
+      font-size: 16px;
+      min-height: 154px;
+      white-space: pre-line;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.22);
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    button.choice, .ghost {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      color: var(--text);
+      padding: 15px 16px;
+      border-radius: 18px;
+      text-align: left;
+      cursor: pointer;
+      transition: .18s ease;
+      font-size: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    button.choice:hover, .ghost:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.07));
+      border-color: rgba(255,255,255,0.24);
+    }
+
+    button.choice:active, .ghost:active {
+      transform: translateY(0);
+    }
+
+    .side {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
+        var(--panel);
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.045);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      letter-spacing: 0.2px;
+    }
+
+    .boys {
+      display: grid;
+      gap: 10px;
+    }
+
+    .boy {
+      display: grid;
+      grid-template-columns: 46px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border-radius: 16px;
+      padding: 11px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .boy.active {
+      border-color: rgba(255,217,137,0.48);
+      background: linear-gradient(90deg, rgba(255,217,137,0.16), rgba(255,255,255,0.05));
+      box-shadow: inset 0 0 0 1px rgba(255,217,137,0.18);
+    }
+
+    .boy .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.08);
+      font-size: 22px;
+    }
+
+    .boy .n {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .boy .d {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .scorebox {
+      text-align: right;
+      min-width: 54px;
+    }
+
+    .score {
+      font-weight: 900;
+      color: var(--good);
+      font-size: 16px;
+    }
+
+    .rank {
+      color: var(--muted-2);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .tip {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ghost {
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .small {
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 980px) {
+      .panel { grid-template-columns: 1fr; }
+      .scene { min-height: auto; }
+      .chipbar { justify-content: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 18px 14px 26px; }
+      .hero { padding: 18px 16px 0; }
+      .dialogue-shell { margin: 0 10px 10px; }
+      .dialogue { padding: 18px 15px 14px; }
+      .nameplate { flex-direction: column; align-items: flex-start; }
+      .meter { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <div class="eyebrow">💘 恋爱互动 Demo · 网页小游戏雏形</div>
+        <div class="title">小诗与五个男模</div>
+        <div class="subtitle">一个更像视觉小说的精修版界面：舞台感更强、角色信息更清楚、对话框和好感度更像正经小游戏。</div>
+      </div>
+      <div class="chipbar">
+        <div class="chip">题材：暧昧修罗场</div>
+        <div class="chip">玩法：剧情选择 + 好感度</div>
+        <div class="chip">定位：H5 恋爱 Demo</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <section class="scene">
+        <div class="hero">
+          <div class="hero-top">
+            <div class="location" id="location">🎬 霓虹时尚秀后台</div>
+            <div class="scene-badge" id="sceneBadge">夜色正在升温</div>
+          </div>
+
+          <div class="portrait-stage">
+            <div class="glow-ring"></div>
+            <div class="avatar-card">
+              <div class="avatar" id="avatar">✨</div>
+            </div>
+          </div>
+
+          <div class="nameplate">
+            <div>
+              <div class="speaker" id="speaker">旁白</div>
+              <div class="role" id="role">故事正在开始</div>
+            </div>
+            <div class="meter">
+              <div class="label" id="focusLabel">当前心动值</div>
+              <div class="bar"><div class="fill" id="focusFill"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dialogue-shell">
+          <div class="dialogue-top">
+            <div class="dialogue-tag">✦ 剧情对话</div>
+            <div class="dialogue-hint">选择会影响最终路线与结局</div>
+          </div>
+          <div class="dialogue">
+            <div class="story" id="story"></div>
+            <div class="choices" id="choices"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="card">
+          <h3>角色列表</h3>
+          <div class="boys" id="boys"></div>
+        </div>
+
+        <div class="card">
+          <h3>玩法说明</h3>
+          <div class="tip">
+            每次选择都会影响不同角色的好感度。<br />
+            最终最高好感的角色，会触发专属结局。<br />
+            这一版主要强化了舞台感、对话氛围和角色面板的游戏感。
+          </div>
+          <div class="small">
+            当前主角默认名为小诗。后续还能继续往上加：角色立绘、BGM、存档、多周目、CG 图、聊天模式、换装系统。
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>操作</h3>
+          <div class="footer-actions">
+            <button class="ghost" id="restartBtn">重新开始</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const characters = {
+      ice: { name: "裴沉", role: "高冷禁欲系", icon: "🖤", desc: "话少眼冷，越靠近越危险", score: 0 },
+      sun: { name: "陆曜", role: "阳光撩人系", icon: "☀️", desc: "笑起来像舞台追光", score: 0 },
+      gentle: { name: "温叙", role: "温柔治愈系", icon: "🤍", desc: "很会看你的情绪", score: 0 },
+      fox: { name: "沈弋", role: "腹黑成熟系", icon: "🦊", desc: "说话总像另有深意", score: 0 },
+      puppy: { name: "江临", role: "年下黏人系", icon: "🐶", desc: "眼神热烈得藏不住", score: 0 },
+    };
+
+    const nodes = {
+      start: {
+        location: "🎬 霓虹时尚秀后台",
+        badge: "夜色正在升温",
+        speaker: "旁白",
+        role: "午夜大秀即将开场",
+        avatar: "✨",
+        story: "你叫小诗，是今晚被临时邀请到后台的神秘少女。\n刚推开化妆间的门，五个顶级男模同时朝你看过来。\n空气像被香水、闪光灯和心跳搅乱了。\n第一个朝你走来的人，是——",
+        choices: [
+          { text: "看向那个眼神最冷、最难靠近的男人", next: "ice1", effect: { ice: 2 } },
+          { text: "朝那个笑得最耀眼的人走过去", next: "sun1", effect: { sun: 2 } },
+          { text: "先站在原地，礼貌地和所有人打招呼", next: "all1", effect: { gentle: 1, fox: 1, puppy: 1 } },
+        ]
+      },
+      ice1: {
+        location: "🪞 主后台镜前区",
+        badge: "气压很低，但视线发烫",
+        speaker: "裴沉",
+        role: "高冷禁欲系",
+        avatar: "🖤",
+        focus: "ice",
+        story: "裴沉垂眼看你，指尖慢条斯理地整理袖扣。\n“你不是工作人员。”\n他说得像在审问，可视线却停在你耳边的碎发上。\n“那你是来找人的，还是……来看我？”",
+        choices: [
+          { text: "“也许两种都有。”微笑反击", next: "corridor", effect: { ice: 2, fox: 1 } },
+          { text: "“你这么自信？”故意逗他", next: "corridor", effect: { ice: 1, sun: 1 } },
+          { text: "“我只是迷路了。”先保守一点", next: "corridor", effect: { gentle: 1 } },
+        ]
+      },
+      sun1: {
+        location: "💡 灯光测试区",
+        badge: "像被追光偏爱的一秒",
+        speaker: "陆曜",
+        role: "阳光撩人系",
+        avatar: "☀️",
+        focus: "sun",
+        story: "陆曜一边笑一边朝你走近，像是整个后台最明亮的一束光。\n“你一来，导演都该担心主镜头被抢了。”\n他说话太自然，像你们早就认识。\n“等会儿结束，要不要跟我一起溜出去喝点东西？”",
+        choices: [
+          { text: "“你邀请人的方式一直这么熟练吗？”", next: "corridor", effect: { sun: 2, fox: 1 } },
+          { text: "“看你表现。”给他一点甜头", next: "corridor", effect: { sun: 2, puppy: 1 } },
+          { text: "“先让我看看你值不值得。”", next: "corridor", effect: { sun: 1, ice: 1 } },
+        ]
+      },
+      all1: {
+        location: "🥂 后台公共休息区",
+        badge: "所有人的目光都在你身上",
+        speaker: "旁白",
+        role: "气氛开始失控",
+        avatar: "🎭",
+        story: "你礼貌地和所有人打了招呼。\n温叙递给你一杯热可可，江临已经凑过来问你是不是第一次来这种秀场。\n角落里，沈弋半倚在桌边，像看戏一样打量你。\n你决定先和谁多说两句？",
+        choices: [
+          { text: "接过温叙的可可，先和温柔的人说话", next: "gentle1", effect: { gentle: 2 } },
+          { text: "被江临的热情打动，先陪他聊天", next: "puppy1", effect: { puppy: 2 } },
+          { text: "走向那个一直在看你的沈弋", next: "fox1", effect: { fox: 2 } },
+        ]
+      },
+      gentle1: {
+        location: "☕ 安静休息角",
+        badge: "温柔从不是没有力量",
+        speaker: "温叙",
+        role: "温柔治愈系",
+        avatar: "🤍",
+        focus: "gentle",
+        story: "温叙把温度刚好的可可递到你掌心，声音也轻。\n“第一次来这种地方吧？你看起来有点紧张。”\n他没有逼近，却让人很容易放下防备。\n“要是你不习惯，我可以陪你待到结束。”",
+        choices: [
+          { text: "“你一直都这么照顾人吗？”", next: "corridor", effect: { gentle: 2 } },
+          { text: "“那你可别中途把我丢下。”", next: "corridor", effect: { gentle: 2, puppy: 1 } },
+          { text: "“谢谢，我其实没你想得那么脆弱。”", next: "corridor", effect: { ice: 1, gentle: 1 } },
+        ]
+      },
+      fox1: {
+        location: "🎩 造型道具间门口",
+        badge: "危险从来比温顺更迷人",
+        speaker: "沈弋",
+        role: "腹黑成熟系",
+        avatar: "🦊",
+        focus: "fox",
+        story: "沈弋看着你笑，笑意却不完全温柔。\n“你从进门开始，已经让三个人乱了节奏。”\n他微微低头，像是要和你共享某个秘密。\n“所以，你是故意的，还是你自己都不知道自己有多危险？”",
+        choices: [
+          { text: "“你猜。”把主动权留给他", next: "corridor", effect: { fox: 2, ice: 1 } },
+          { text: "“那你也乱了吗？”直球反问", next: "corridor", effect: { fox: 2, sun: 1 } },
+          { text: "“你说得太夸张了。”装无辜", next: "corridor", effect: { gentle: 1, fox: 1 } },
+        ]
+      },
+      puppy1: {
+        location: "🧥 试衣区外侧",
+        badge: "热烈的人，连呼吸都藏不住心事",
+        speaker: "江临",
+        role: "年下黏人系",
+        avatar: "🐶",
+        focus: "puppy",
+        story: "江临凑得很近，眼睛亮得毫不掩饰。\n“姐姐，你刚才一进来我就注意到了。”\n他说完又像怕你不信，赶紧补了一句：\n“真的，不是对谁都这样。”",
+        choices: [
+          { text: "“你这句是不是对很多人说过？”故意逗他", next: "corridor", effect: { puppy: 2, sun: 1 } },
+          { text: "“那你可要好好证明给我看。”", next: "corridor", effect: { puppy: 2 } },
+          { text: "摸摸他的头，“先别这么激动。”", next: "corridor", effect: { puppy: 1, gentle: 1 } },
+        ]
+      },
+      corridor: {
+        location: "🌙 后台长廊",
+        badge: "真正的选择，现在才开始",
+        speaker: "旁白",
+        role: "大秀开场前 10 分钟",
+        avatar: "🌙",
+        story: "导演在远处喊人，后台一下子忙了起来。\n就在你准备往后退的时候，五个人几乎同时注意到你要离开。\n有人拦住去路，有人递来邀请，有人只是沉默地看着你。\n这一次，你想把今晚的时间留给谁？",
+        choices: [
+          { text: "跟裴沉去安静的天台透口气", next: "final", effect: { ice: 2 } },
+          { text: "和陆曜趁乱溜出去买夜宵", next: "final", effect: { sun: 2 } },
+          { text: "留下来陪温叙慢慢聊天", next: "final", effect: { gentle: 2 } },
+          { text: "跟沈弋玩一场危险的言语拉扯", next: "final", effect: { fox: 2 } },
+          { text: "答应江临看完秀后单独散步", next: "final", effect: { puppy: 2 } },
+        ]
+      },
+      final: {
+        location: "💘 结局前夜",
+        badge: "今夜的心动已经有答案",
+        speaker: "旁白",
+        role: "最后一页即将翻开",
+        avatar: "💘",
+        story: "故事来到结尾。\n你和某个人之间，已经悄悄偏向了不可逆的方向。",
+        choices: [
+          { text: "查看你的专属结局", next: "ENDING" }
+        ]
+      }
+    };
+
+    let current = "start";
+
+    function applyEffect(effect = {}) {
+      Object.keys(effect).forEach((key) => {
+        if (characters[key]) characters[key].score += effect[key];
+      });
+    }
+
+    function sortedCharacters() {
+      return Object.entries(characters).sort((a, b) => b[1].score - a[1].score);
+    }
+
+    function topCharacter() {
+      return sortedCharacters()[0][0];
+    }
+
+    function endingNode() {
+      const key = topCharacter();
+      const c = characters[key];
+      const endings = {
+        ice: {
+          location: "🌌 天台夜风",
+          badge: "冷月偏爱",
+          speaker: c.name,
+          role: c.role,
+          avatar: c.icon,
+          focus: key,
+          story: "风吹乱了你的头发，裴沉抬手替你拨到耳后。\n他还是那副冷淡样子，声音却低得近乎温柔。\n“我本来不喜欢失控。”\n“但如果是因为你，好像也不是不能接受。”\n——你解锁了结局【冷月偏爱】",
+        },
+        sun: {
+          location: "🥤 深夜便利店",
+          badge: "月光热恋",
+          speaker: c.name,
+          role: c.role,
+          avatar: c.icon,
+          focus: key,
+          story: "陆曜带你逃离喧闹后台，在便利店门口笑得像少年。\n他把热牛奶塞进你手里，侧头看你：\n“今晚最好看的，不是秀。”\n“是你愿意跟我一起跑出来。”\n——你解锁了结局【月光热恋】",
+        },
+        gentle: {
+          location: "🕯️ 休息室暖灯下",
+          badge: "温柔捕获",
+          speaker: c.name,
+          role: c.role,
+          avatar: c.icon,
+          focus: key,
+          story: "温叙安静地陪你坐着，连沉默都显得舒服。\n他轻轻问你累不累，然后把外套披到你肩上。\n“我不急着要答案。”\n“但我希望你每次不安时，都愿意先来找我。”\n——你解锁了结局【温柔捕获】",
+        },
+        fox: {
+          location: "🗝️ 道具间暗门后",
+          badge: "危险着迷",
+          speaker: c.name,
+          role: c.role,
+          avatar: c.icon,
+          focus: key,
+          story: "沈弋把你带到人少的地方，眼里全是明目张胆的兴味。\n“你知道吗？”他低声笑了下。\n“我原本只想看看你会把局面搅多乱。”\n“现在我改主意了——我想让你只看我。”\n——你解锁了结局【危险着迷】",
+        },
+        puppy: {
+          location: "🌃 秀场外长街",
+          badge: "年下失守",
+          speaker: c.name,
+          role: c.role,
+          avatar: c.icon,
+          focus: key,
+          story: "江临跟在你身边，像只终于得到允许靠近的小狗。\n他走着走着突然停下，认真得不像玩笑。\n“我知道我看起来冲动。”\n“但喜欢你这件事，我是认真的。”\n——你解锁了结局【年下失守】",
+        }
+      };
+      return endings[key];
+    }
+
+    function renderScores(activeFocus = null) {
+      const boys = document.getElementById("boys");
+      const ranking = sortedCharacters();
+      const rankMap = {};
+      ranking.forEach(([key], index) => rankMap[key] = index + 1);
+
+      boys.innerHTML = Object.entries(characters).map(([key, c]) => `
+        <div class="boy ${activeFocus === key ? 'active' : ''}">
+          <div class="icon">${c.icon}</div>
+          <div>
+            <div class="n">${c.name}</div>
+            <div class="d">${c.role}</div>
+          </div>
+          <div class="scorebox">
+            <div class="score">${c.score}</div>
+            <div class="rank">No.${rankMap[key]}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function render(nodeKey) {
+      const node = nodeKey === "ENDING" ? endingNode() : nodes[nodeKey];
+      document.getElementById("location").textContent = node.location || "";
+      document.getElementById("sceneBadge").textContent = node.badge || "剧情推进中";
+      document.getElementById("speaker").textContent = node.speaker || "";
+      document.getElementById("role").textContent = node.role || "";
+      document.getElementById("avatar").textContent = node.avatar || "✨";
+      document.getElementById("story").textContent = node.story || "";
+
+      const focusFill = document.getElementById("focusFill");
+      const focusLabel = document.getElementById("focusLabel");
+      let activeFocus = node.focus || null;
+
+      if (node.focus && characters[node.focus]) {
+        const val = Math.min(100, characters[node.focus].score * 18);
+        focusFill.style.width = val + "%";
+        focusLabel.textContent = characters[node.focus].name + " 心动值";
+      } else {
+        const winner = characters[topCharacter()];
+        focusFill.style.width = Math.min(100, winner.score * 18) + "%";
+        focusLabel.textContent = "当前最高好感";
+        activeFocus = topCharacter();
+      }
+
+      renderScores(activeFocus);
+
+      const choices = document.getElementById("choices");
+      choices.innerHTML = "";
+      (node.choices || []).forEach((choice) => {
+        const btn = document.createElement("button");
+        btn.className = "choice";
+        btn.textContent = choice.text;
+        btn.onclick = () => {
+          applyEffect(choice.effect);
+          current = choice.next;
+          render(current);
+        };
+        choices.appendChild(btn);
+      });
+    }
+
+    function restart() {
+      Object.values(characters).forEach((c) => c.score = 0);
+      current = "start";
+      render(current);
+    }
+
+    document.getElementById("restartBtn").onclick = restart;
+    restart();
+  </script>
+</body>
+</html>
