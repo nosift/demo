@@ -139,6 +139,8 @@
         linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
         linear-gradient(180deg, rgba(255,255,255,0.02), transparent 28%),
         var(--panel);
+      background-size: cover;
+      background-position: center;
     }
 
     .scene::before {
@@ -149,7 +151,7 @@
         radial-gradient(circle at 20% 18%, rgba(255,255,255,0.16), transparent 18%),
         radial-gradient(circle at 84% 14%, rgba(255,117,187,0.18), transparent 18%),
         radial-gradient(circle at 55% 74%, rgba(144,117,255,0.22), transparent 28%),
-        linear-gradient(180deg, rgba(14,14,28,0.1), rgba(14,14,28,0.42));
+        linear-gradient(180deg, rgba(8,8,16,0.18), rgba(8,8,16,0.68));
       pointer-events: none;
     }
 
@@ -226,6 +228,8 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
+      background-size: cover;
+      background-position: center top;
     }
 
     .avatar-card::before {
@@ -233,8 +237,8 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.28), transparent 24%),
-        linear-gradient(180deg, transparent, rgba(9,8,20,0.18));
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.18), transparent 24%),
+        linear-gradient(180deg, transparent, rgba(9,8,20,0.28));
       pointer-events: none;
     }
 
@@ -243,6 +247,7 @@
       z-index: 1;
       font-size: clamp(88px, 16vw, 150px);
       filter: drop-shadow(0 10px 30px rgba(0,0,0,0.22));
+      display: none;
     }
 
     .nameplate {
@@ -528,7 +533,7 @@
 
           <div class="portrait-stage">
             <div class="glow-ring"></div>
-            <div class="avatar-card">
+            <div class="avatar-card" id="avatarCard">
               <div class="avatar" id="avatar">✨</div>
             </div>
           </div>
@@ -587,11 +592,23 @@
 
   <script>
     const characters = {
-      ice: { name: "裴沉", role: "高冷禁欲系", icon: "🖤", desc: "话少眼冷，越靠近越危险", score: 0 },
-      sun: { name: "陆曜", role: "阳光撩人系", icon: "☀️", desc: "笑起来像舞台追光", score: 0 },
-      gentle: { name: "温叙", role: "温柔治愈系", icon: "🤍", desc: "很会看你的情绪", score: 0 },
+      ice: { name: "裴沉", role: "高冷禁欲系", icon: "🖤", desc: "话少眼冷，越靠近越危险", score: 0, portrait: "./assets/portraits/peichen.jpg" },
+      sun: { name: "陆曜", role: "阳光撩人系", icon: "☀️", desc: "笑起来像舞台追光", score: 0, portrait: "./assets/portraits/luyao.jpg" },
+      gentle: { name: "温叙", role: "温柔治愈系", icon: "🤍", desc: "很会看你的情绪", score: 0, portrait: "./assets/portraits/wenxu.jpg" },
       fox: { name: "沈弋", role: "腹黑成熟系", icon: "🦊", desc: "说话总像另有深意", score: 0 },
       puppy: { name: "江临", role: "年下黏人系", icon: "🐶", desc: "眼神热烈得藏不住", score: 0 },
+      heroine: { name: "小诗", role: "神秘少女", icon: "✨", desc: "像夜色里会发光的人", score: 0, portrait: "./assets/portraits/xiaoshi.jpg" }
+    };
+
+    const CGS = {
+      cover: "./assets/cg/cover.jpg",
+      backstage: "./assets/cg/backstage-first-meet.jpg",
+      peichen: "./assets/cg/pei-chen-mirror.jpg",
+      luyao: "./assets/cg/lu-yao-light.jpg",
+      wenxu: "./assets/cg/wen-xu-cocoa.jpg",
+      shenyi: "./assets/cg/shen-yi-whisper.jpg",
+      jianglin: "./assets/cg/jiang-lin-night.jpg",
+      fivemen: "./assets/cg/five-men.jpg"
     };
 
     const nodes = {
@@ -601,6 +618,8 @@
         speaker: "旁白",
         role: "午夜大秀即将开场",
         avatar: "✨",
+        portrait: "heroine",
+        bg: CGS.cover,
         story: "你叫小诗，是今晚被临时邀请到后台的神秘少女。\n刚推开化妆间的门，五个顶级男模同时朝你看过来。\n空气像被香水、闪光灯和心跳搅乱了。\n第一个朝你走来的人，是——",
         choices: [
           { text: "看向那个眼神最冷、最难靠近的男人", next: "ice1", effect: { ice: 2 } },
@@ -615,6 +634,8 @@
         role: "高冷禁欲系",
         avatar: "🖤",
         focus: "ice",
+        portrait: "ice",
+        bg: CGS.peichen,
         story: "裴沉垂眼看你，指尖慢条斯理地整理袖扣。\n“你不是工作人员。”\n他说得像在审问，可视线却停在你耳边的碎发上。\n“那你是来找人的，还是……来看我？”",
         choices: [
           { text: "“也许两种都有。”微笑反击", next: "corridor", effect: { ice: 2, fox: 1 } },
@@ -629,6 +650,8 @@
         role: "阳光撩人系",
         avatar: "☀️",
         focus: "sun",
+        portrait: "sun",
+        bg: CGS.luyao,
         story: "陆曜一边笑一边朝你走近，像是整个后台最明亮的一束光。\n“你一来，导演都该担心主镜头被抢了。”\n他说话太自然，像你们早就认识。\n“等会儿结束，要不要跟我一起溜出去喝点东西？”",
         choices: [
           { text: "“你邀请人的方式一直这么熟练吗？”", next: "corridor", effect: { sun: 2, fox: 1 } },
@@ -642,6 +665,7 @@
         speaker: "旁白",
         role: "气氛开始失控",
         avatar: "🎭",
+        bg: CGS.backstage,
         story: "你礼貌地和所有人打了招呼。\n温叙递给你一杯热可可，江临已经凑过来问你是不是第一次来这种秀场。\n角落里，沈弋半倚在桌边，像看戏一样打量你。\n你决定先和谁多说两句？",
         choices: [
           { text: "接过温叙的可可，先和温柔的人说话", next: "gentle1", effect: { gentle: 2 } },
@@ -656,6 +680,8 @@
         role: "温柔治愈系",
         avatar: "🤍",
         focus: "gentle",
+        portrait: "gentle",
+        bg: CGS.wenxu,
         story: "温叙把温度刚好的可可递到你掌心，声音也轻。\n“第一次来这种地方吧？你看起来有点紧张。”\n他没有逼近，却让人很容易放下防备。\n“要是你不习惯，我可以陪你待到结束。”",
         choices: [
           { text: "“你一直都这么照顾人吗？”", next: "corridor", effect: { gentle: 2 } },
@@ -670,6 +696,7 @@
         role: "腹黑成熟系",
         avatar: "🦊",
         focus: "fox",
+        bg: CGS.shenyi,
         story: "沈弋看着你笑，笑意却不完全温柔。\n“你从进门开始，已经让三个人乱了节奏。”\n他微微低头，像是要和你共享某个秘密。\n“所以，你是故意的，还是你自己都不知道自己有多危险？”",
         choices: [
           { text: "“你猜。”把主动权留给他", next: "corridor", effect: { fox: 2, ice: 1 } },
@@ -684,6 +711,7 @@
         role: "年下黏人系",
         avatar: "🐶",
         focus: "puppy",
+        bg: CGS.jianglin,
         story: "江临凑得很近，眼睛亮得毫不掩饰。\n“姐姐，你刚才一进来我就注意到了。”\n他说完又像怕你不信，赶紧补了一句：\n“真的，不是对谁都这样。”",
         choices: [
           { text: "“你这句是不是对很多人说过？”故意逗他", next: "corridor", effect: { puppy: 2, sun: 1 } },
@@ -697,6 +725,7 @@
         speaker: "旁白",
         role: "大秀开场前 10 分钟",
         avatar: "🌙",
+        bg: CGS.fivemen,
         story: "导演在远处喊人，后台一下子忙了起来。\n就在你准备往后退的时候，五个人几乎同时注意到你要离开。\n有人拦住去路，有人递来邀请，有人只是沉默地看着你。\n这一次，你想把今晚的时间留给谁？",
         choices: [
           { text: "跟裴沉去安静的天台透口气", next: "final", effect: { ice: 2 } },
@@ -712,6 +741,7 @@
         speaker: "旁白",
         role: "最后一页即将翻开",
         avatar: "💘",
+        bg: CGS.cover,
         story: "故事来到结尾。\n你和某个人之间，已经悄悄偏向了不可逆的方向。",
         choices: [
           { text: "查看你的专属结局", next: "ENDING" }
@@ -817,6 +847,23 @@
       document.getElementById("role").textContent = node.role || "";
       document.getElementById("avatar").textContent = node.avatar || "✨";
       document.getElementById("story").textContent = node.story || "";
+
+      const avatarCard = document.getElementById("avatarCard");
+      const avatar = document.getElementById("avatar");
+      if (node.portrait && characters[node.portrait] && characters[node.portrait].portrait) {
+        avatarCard.style.backgroundImage = `url(${characters[node.portrait].portrait})`;
+        avatar.style.display = "none";
+      } else {
+        avatarCard.style.backgroundImage = "";
+        avatar.style.display = "block";
+      }
+
+      const scene = document.querySelector('.scene');
+      if (node.bg) {
+        scene.style.backgroundImage = `linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)), linear-gradient(180deg, rgba(255,255,255,0.02), transparent 28%), url(${node.bg})`;
+      } else {
+        scene.style.backgroundImage = `linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)), linear-gradient(180deg, rgba(255,255,255,0.02), transparent 28%), none`;
+      }
 
       const focusFill = document.getElementById("focusFill");
       const focusLabel = document.getElementById("focusLabel");
